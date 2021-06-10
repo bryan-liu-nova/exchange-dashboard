@@ -1,0 +1,1 @@
+export { fetchNewPairs } from './pairs/pairsAction';
