@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
-import { useApolloClient } from '@apollo/react-hooks'
+// import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import gql from 'graphql-tag'
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
