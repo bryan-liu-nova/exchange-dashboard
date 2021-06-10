@@ -1,23 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
-import { HttpLink } from 'apollo-link-http'
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import './App.css'
-
-export const client = new ApolloClient({
-  link: new HttpLink({
-    uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
-  }),
-  fetchOptions: {
-    mode: 'no-cors'
-  },
-  cache: new InMemoryCache()
-})
 
 // const ETH_PRICE_QUERY = gql`
 //   query bundles {

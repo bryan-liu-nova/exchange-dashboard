@@ -2,12 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ToastContainer } from 'react-toastify';
 import { ApolloProvider } from '@apollo/client'
-import { client } from './App'
+import { HttpLink } from 'apollo-link-http'
+import { ApolloClient } from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
+
+const client = new ApolloClient({
+  link: new HttpLink({
+    uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
+  }),
+  fetchOptions: {
+    mode: 'no-cors'
+  },
+  cache: new InMemoryCache()
+})
 
 ReactDOM.render(
   <React.StrictMode>
