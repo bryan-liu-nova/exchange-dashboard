@@ -64,10 +64,7 @@ query fetchMints($token: String!)
 function App() {
   const authenticated = false;
   const client = useApolloClient();
-  // const { loading: pairsLoading, data: pairsData } = useQuery(GET_LATEST_PAIRS);
-  // const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
-  // const [pairsResult, setPairsResult] = useState([]);
 
   const getData = useCallback(async () => {
     const result = [];

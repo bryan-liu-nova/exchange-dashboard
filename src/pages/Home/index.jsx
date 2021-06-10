@@ -24,8 +24,6 @@ const calculateOffsetTime = (timeStamp) => {
 // `;
 
 const Home = ({ data, isLoading }) => {
-  // const [getPrice, { loading: isLoading, data: priceData }] =
-  //   useLazyQuery(GET_TOKEN_PRICE);
   console.log(data, "this is data");
   return (
     <StyledHome>
@@ -100,7 +98,7 @@ const Home = ({ data, isLoading }) => {
                           <div className="buy-btn">buy</div>
                         </td>
                         <td>
-                          {item.reserve1 !== 0
+                          {item.reserve1 !== "0"
                             ? item.mints.length > 0
                               ? (
                                   parseFloat(item.mints[0].amountUSD) /
@@ -115,7 +113,7 @@ const Home = ({ data, isLoading }) => {
                             : 0}
                           $
                           <br />
-                          {item.reserve1 !== 0
+                          {item.reserve1 !== "0"
                             ? (
                                 parseFloat(item.reserveUSD) /
                                 2 /
@@ -176,7 +174,7 @@ const Home = ({ data, isLoading }) => {
                           <div className="buy-btn">buy</div>
                         </td>
                         <td>
-                          {item.reserve0 !== 0
+                          {item.reserve0 !== "0"
                             ? item.mints.length > 0
                               ? (
                                   parseFloat(item.mints[0].amountUSD) /
@@ -191,7 +189,7 @@ const Home = ({ data, isLoading }) => {
                             : 0}
                           $
                           <br />
-                          {item.reserve0 !== 0
+                          {item.reserve0 !== "0"
                             ? (
                                 parseFloat(item.reserveUSD) /
                                 2 /
