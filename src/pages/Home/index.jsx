@@ -32,6 +32,20 @@ const calculateOffsetTime = (timeStamp) => {
 //   }
 // `;
 
+const CustomLink = ({ address, title }) => {
+  const redirectToEther = () => {
+    window.open(`https://etherscan.io/address/${address}`);
+  };
+  return (
+    <div
+      style={{ color: "#3498db", cursor: "pointer" }}
+      onClick={redirectToEther}
+    >
+      {title}
+    </div>
+  );
+};
+
 const Home = ({ data, isLoading }) => {
   // console.log(data, "this is data");
   console.log(isLoading, "this is loading status");
@@ -105,7 +119,10 @@ const Home = ({ data, isLoading }) => {
                     item.token0.symbol === "WETH" ? (
                       <tr key={index}>
                         <td>
-                          {item.token1.symbol}
+                          <CustomLink
+                            address={item.token1.id}
+                            title={item.token1.symbol}
+                          />
                           <br />
                           {item.token1.name}
                         </td>
@@ -181,7 +198,11 @@ const Home = ({ data, isLoading }) => {
                     ) : (
                       <tr key={index}>
                         <td>
-                          {item.token0.symbol}
+                          <CustomLink
+                            address={item.token0.id}
+                            title={item.token0.symbol}
+                          />
+
                           <br />
                           {item.token0.name}
                         </td>
