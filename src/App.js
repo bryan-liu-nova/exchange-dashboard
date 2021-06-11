@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
-// import { useApolloClient } from '@apollo/react-hooks'
 import { useApolloClient } from '@apollo/client'
+import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
@@ -66,31 +66,66 @@ function App() {
   const authenticated = false;
   const client = useApolloClient();
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { loading: latestPairLoading, data: latestPairsData } = useQuery(GET_LATEST_PAIRS, {
+    pollInterval: 500,
+  })
+  // const getData = useCallback(async () => {
+  //   const result = [];
+  //   try {
+  //     const data = await client.query({ query: GET_LATEST_PAIRS, variables: { pollInterval: 500 } });
+  //     console.log(data);
+  //     if (data && data.data && data.data.pairs && data.data.pairs.length > 0) {
+  //       let res = data.data.pairs;
+  //       for (let i = 0; i < res.length; i++) {
+  //         const initialData = await client.query({ query: INITIAL_PRICE, variables: { token: res[i].id } });
+  //         result.push({
+  //           ...res[i],
+  //           mints: initialData.data.mints
+  //         });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   setData(result);
+  // })
 
-  const getData = useCallback(async () => {
+  const getInitialData = useCallback(async () => {
+    if (latestPairLoading) {
+      setIsLoading(true);
+    }
     const result = [];
-    try {
-      const data = await client.query({ query: GET_LATEST_PAIRS, variables: { pollInterval: 1000 } });
-      if (data && data.data && data.data.pairs && data.data.pairs.length > 0) {
-        let res = data.data.pairs;
-        for (let i = 0; i < res.length; i++) {
-          const initialData = await client.query({ query: INITIAL_PRICE, variables: { token: res[i].id } });
+    if (latestPairsData
+      && latestPairsData.pairs
+      && latestPairsData.pairs.length > 0
+    ) {
+      let res = latestPairsData.pairs;
+      for (let i = 0; i < res.length; i++) {
+        try {
+          const initialData = await client.query({
+            query: INITIAL_PRICE,
+            variables: { token: res[i].id }
+          });
           result.push({
             ...res[i],
             mints: initialData.data.mints
           });
+        } catch (error) {
+          console.log(error);
         }
       }
-    } catch (error) {
-      console.log(error);
+      setIsLoading(false);
     }
     setData(result);
-  }, [client])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestPairsData, client])
 
   useEffect(() => {
-    getData();
+    getInitialData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getData])
+  }, [latestPairsData]);
+
   return (
     <BrowserRouter>
       <Route exact path="/">
@@ -98,7 +133,7 @@ function App() {
           <Redirect to="/dashboard" /> :
           <Home
             data={data}
-            isLoading={false}
+            isLoading={isLoading}
           />
         }
       </Route>

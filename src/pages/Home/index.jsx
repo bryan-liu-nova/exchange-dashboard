@@ -1,13 +1,22 @@
 import React from "react";
-// import gql from "graphql-tag";
 import styled from "styled-components";
 import { Header } from "../Common";
+import { css } from "@emotion/react";
+import ClipLoader from "react-spinners/ClipLoader";
+
+const override = css`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const calculateOffsetTime = (timeStamp) => {
   const offset = new Date().getTime() - timeStamp * 1000;
   let seconds = parseInt(offset / 1000) % 60;
   let minutes = parseInt(offset / 1000 / 60) % 60;
-  return minutes + "m " + seconds + "s";
+  let hours = parseInt(offset / 1000 / 60 / 60) % 60;
+  return hours + "h " + minutes + "m " + seconds + "s";
 };
 
 // const GET_TOKEN_PRICE = gql`
@@ -24,7 +33,8 @@ const calculateOffsetTime = (timeStamp) => {
 // `;
 
 const Home = ({ data, isLoading }) => {
-  console.log(data, "this is data");
+  // console.log(data, "this is data");
+  console.log(isLoading, "this is loading status");
   return (
     <StyledHome>
       <Header />
@@ -42,6 +52,12 @@ const Home = ({ data, isLoading }) => {
             </span>
           </div>
           <div className="token-information">
+            <ClipLoader
+              color={"black"}
+              loading={isLoading}
+              css={override}
+              size={150}
+            />
             <table>
               <thead>
                 <tr>
@@ -254,6 +270,12 @@ const StyledBody = styled.div`
   padding-top: 77px;
   min-height: calc(100vh - 77px);
   background-color: #e4ebf5;
+  .loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   .body-container {
     padding: 20px;
     .filter-container {
