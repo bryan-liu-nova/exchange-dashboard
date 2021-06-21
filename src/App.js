@@ -53,8 +53,6 @@ const INITIAL_PRICE = gql`
   }
 }`
 
-const GET_TRANSACTION_QUERY = ``
-
 export const App = () => {
   const authenticated = false;
   const client = useApolloClient();
