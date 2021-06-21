@@ -6,14 +6,6 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import './App.css'
 
-// const ETH_PRICE_QUERY = gql`
-//   query bundles {
-//     bundles(where: { id: "1" }) {
-//       ethPrice
-//     }
-//   }
-// `
-
 const GET_LATEST_PAIRS = gql`{
   pairs (first:10 orderBy:createdAtTimestamp orderDirection:desc) {
     id
@@ -37,31 +29,33 @@ const GET_LATEST_PAIRS = gql`{
 }`
 
 const INITIAL_PRICE = gql`
-query fetchMints($token: String!)
-{
-  mints(first: 1, 
-    orderBy: timestamp, orderDirection: asc
-    where: { pair: $token }
-  ) {
-   transaction {
-     id
-     timestamp
-   }
-    pair{
+  query fetchMints($token: String!)
+  {
+    mints(first: 1, 
+      orderBy: timestamp, orderDirection: asc
+      where: { pair: $token }
+    ) {
+    transaction {
       id
+      timestamp
     }
-   to
-   liquidity
-    sender
-    feeTo
-    feeLiquidity
-   amount0
-   amount1
-   amountUSD
- }
+      pair{
+        id
+      }
+    to
+    liquidity
+      sender
+      feeTo
+      feeLiquidity
+    amount0
+    amount1
+    amountUSD
+  }
 }`
 
-function App() {
+const GET_TRANSACTION_QUERY = ``
+
+export const App = () => {
   const authenticated = false;
   const client = useApolloClient();
   const [data, setData] = useState([]);
@@ -69,28 +63,9 @@ function App() {
   const { loading: latestPairLoading, data: latestPairsData } = useQuery(GET_LATEST_PAIRS, {
     pollInterval: 500,
   })
-  // const getData = useCallback(async () => {
-  //   const result = [];
-  //   try {
-  //     const data = await client.query({ query: GET_LATEST_PAIRS, variables: { pollInterval: 500 } });
-  //     console.log(data);
-  //     if (data && data.data && data.data.pairs && data.data.pairs.length > 0) {
-  //       let res = data.data.pairs;
-  //       for (let i = 0; i < res.length; i++) {
-  //         const initialData = await client.query({ query: INITIAL_PRICE, variables: { token: res[i].id } });
-  //         result.push({
-  //           ...res[i],
-  //           mints: initialData.data.mints
-  //         });
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   setData(result);
-  // })
 
   const getInitialData = useCallback(async () => {
+    console.log('this is triggered', latestPairsData);
     if (latestPairLoading) {
       setIsLoading(true);
     }
@@ -117,7 +92,7 @@ function App() {
       setIsLoading(false);
     }
     setData(result);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [latestPairsData, client])
 
   useEffect(() => {
@@ -140,5 +115,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App

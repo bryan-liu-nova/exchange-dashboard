@@ -42,9 +42,10 @@ const StyledHeader = styled.div`
   font-weight: bold;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  position: fixed;
   left: 0px;
   top: 0px;
+  z-index: 9999;
   .left-container {
       display: flex;
       align-items: center;
