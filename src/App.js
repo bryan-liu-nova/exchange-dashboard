@@ -63,7 +63,6 @@ export const App = () => {
   })
 
   const getInitialData = useCallback(async () => {
-    console.log('this is triggered', latestPairsData);
     if (latestPairLoading) {
       setIsLoading(true);
     }

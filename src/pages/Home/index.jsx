@@ -15,7 +15,7 @@ const Home = ({ data, isLoading }) => {
             <Route exact path="/">
               <Dashboard isLoading={isLoading} data={data} />
             </Route>
-            <Route exact path="/:id/transaction">
+            <Route exact path="/transaction/:address/:symbol">
               <Transaction />
             </Route>
           </Switch>

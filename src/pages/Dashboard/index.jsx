@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import ClipLoader from "react-spinners/ClipLoader";
+import { ScaleLoader } from "react-spinners";
 import { css } from "@emotion/react";
 import DownArrow from "../../assets/keyboard-down-arrow.svg";
 import { Link } from "react-router-dom";
@@ -26,6 +26,7 @@ const Dashboard = ({ isLoading, data }) => {
       symbol: "",
       title: "",
       time: "",
+      tokenAddress: "",
       price: { init: "", current: "" },
       poolToken: { init: "", current: "" },
       marketCap: { init: "", current: "" },
@@ -40,6 +41,7 @@ const Dashboard = ({ isLoading, data }) => {
       defaultToken.symbol = item.token1.symbol;
       defaultToken.amount = item.reserve1;
       defaultToken.tokenName = item.token1.name;
+      defaultToken.tokenAddress = item.token1.id;
       defaultToken.initAmount =
         item.mints.length > 0 ? item.mints[0].amount1 : 0;
 
@@ -52,9 +54,9 @@ const Dashboard = ({ isLoading, data }) => {
       defaultToken.symbol = item.token0.symbol;
       defaultToken.amount = item.reserve0;
       defaultToken.tokenName = item.token0.name;
+      defaultToken.tokenAddress = item.token0.id;
       defaultToken.initAmount =
         item.mints.length > 0 ? item.mints[0].amount0 : 0;
-
       targetToken.symbol = item.token1.symbol;
       targetToken.amount = item.reserve1;
       targetToken.tokenName = item.token1.name;
@@ -64,6 +66,7 @@ const Dashboard = ({ isLoading, data }) => {
       defaultToken.symbol = item.token1.symbol;
       defaultToken.amount = item.reserve1;
       defaultToken.tokenName = item.token1.name;
+      defaultToken.tokenAddress = item.token1.id;
       defaultToken.initAmount =
         item.mints.length > 0 ? item.mints[0].amount1 : 0;
 
@@ -80,6 +83,7 @@ const Dashboard = ({ isLoading, data }) => {
 
     data.symbol = defaultToken.symbol;
     data.title = defaultToken.tokenName;
+    data.tokenAddress = defaultToken.tokenAddress;
     data.time = calculateOffsetTime(item.createdAtTimestamp);
     data.price.init =
       (defaultToken.initAmount
@@ -117,11 +121,11 @@ const Dashboard = ({ isLoading, data }) => {
   };
 
   const getPairData = (data) => {
-    const result = [];
+    const res = [];
     data.forEach((item, index) => {
-      result[index] = getData(item);
+      res[index] = getData(item);
     });
-    setResult(result);
+    setResult(res);
   };
 
   useEffect(() => {
@@ -141,7 +145,7 @@ const Dashboard = ({ isLoading, data }) => {
               <option value="20">20</option>
             </select>
             <div className="arrow-button">
-              <img src={DownArrow} alt="loading failed"/>
+              <img src={DownArrow} alt="loading failed" />
             </div>
           </div>
           <span className="content">
@@ -149,8 +153,8 @@ const Dashboard = ({ isLoading, data }) => {
           </span>
         </div>
         <div className="token-information">
-          <ClipLoader
-            color={"black"}
+          <ScaleLoader
+            color={"#36d7b7"}
             loading={isLoading}
             css={override}
             size={150}
@@ -184,7 +188,9 @@ const Dashboard = ({ isLoading, data }) => {
                     <div className="token">
                       <div className="multi-item">
                         <div>
-                          <Link to={`/${item.symbol}/transaction`}>{item.symbol}</Link>
+                          <Link to={`/transaction/${item.tokenAddress}/${item.symbol}`}>
+                            {item.symbol}
+                          </Link>
                         </div>
                         <div>{item.title}</div>
                       </div>
@@ -271,16 +277,22 @@ const StyledDashboard = styled.div`
     .token-information {
       margin: 20px 0px;
       background-color: white;
+      height: calc(100vh - 192px);
+      overflow: scroll;
+      overflow-x: hidden;
       .table-container {
         .custom-row {
           display: flex;
           &.thead {
             border-bottom: 1px solid gray;
+            position: sticky;
+            top: 0;
+            left: 0;
+            background: white;
           }
           &.tbody {
             > div {
               display: flex;
-
             }
           }
           > div {

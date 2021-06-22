@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ToastContainer } from 'react-toastify';
 import { ApolloProvider } from '@apollo/client'
 import { HttpLink } from 'apollo-link-http'
 import { ApolloClient } from 'apollo-client'
@@ -9,7 +8,6 @@ import { App } from './App';
 import * as serviceWorker from './serviceWorker';
 
 import './index.css';
-import 'react-toastify/dist/ReactToastify.css';
 
 const client = new ApolloClient({
   link: new HttpLink({
@@ -25,7 +23,6 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <App />
-      <ToastContainer />
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root'),
